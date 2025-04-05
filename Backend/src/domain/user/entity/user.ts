@@ -8,7 +8,7 @@ export type UserProps = {
 export class User {
     private constructor(private props: UserProps) {}
 
-    public static create(name: string, email: number) {
+    public static create(name: string, email: string, age:number) {
         return new User({
             id: crypto.randomUUID().toString(),
             name,
