@@ -16,7 +16,7 @@ export class SaveUserRoute implements Route {
 
     public static create(SaveUserService: SaveUserUsecase) {
         return new SaveUserRoute(
-            "/Users",
+            "/Save",
             HttpMethod.POST,
             SaveUserService
         );

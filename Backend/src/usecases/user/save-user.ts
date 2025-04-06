@@ -20,8 +20,8 @@ export class SaveUserUsecase
         age,
     }: SaveUserDto): Promise<SaveUserDto> {
         const aUser = User.create(id,name, email,age);
-        if(id != null){        
-            const existEmailUser = await this.UserGateway.getByEmail(email);
+        const existEmailUser = await this.UserGateway.getByEmail(email);
+        if(id != null){ 
             if(existEmailUser){
                 if(existEmailUser.id != id){
                     throw new Error("E-mail já cadastrado");                       
@@ -29,7 +29,10 @@ export class SaveUserUsecase
             }
             await this.UserGateway.update(aUser); 
         }
-        else{        
+        else{
+            if(existEmailUser){
+                throw new Error("E-mail já cadastrado");   
+            }      
             await this.UserGateway.create(aUser);            
         }
         const output = this.presentOutput(aUser);

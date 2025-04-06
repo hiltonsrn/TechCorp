@@ -36,7 +36,13 @@ export class UserRepositoryPrisma implements UserGateway {
             data: data,
           })
     }
-
+    public async delete(id: string): Promise<void> {
+        await this.prismaClient.user.delete({
+            where: {
+              id:  id
+            }
+        });
+    }
     public async list(): Promise<User[]> {
         const Users = await this.prismaClient.user.findMany();
 
@@ -57,6 +63,23 @@ export class UserRepositoryPrisma implements UserGateway {
         const p = await this.prismaClient.user.findFirst({
             where: {
               email: email,
+            },
+          });
+        let u = null;
+        if(p != null){
+            u = User.with({
+                id: p.id,
+                name: p.name,
+                email: p.email,
+                age: p.age,
+            });
+        }
+        return u;
+    }
+    public async getById(id: string): Promise<User> {
+        const p = await this.prismaClient.user.findFirst({
+            where: {
+              id: id,
             },
           });
         let u = null;
