@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
 import {
-    SaveUserInputDto,
-    SaveUserUsecase,
+    SaveUserUsecase
 } from "../../../../../usecases/user/save-user";
 import { HttpMethod, Route } from "../route";
+import { ResponseDto } from "../../../dto/responsedto";
+import { SaveUserDto } from "../../../dto/saveuserdto";
 
-export type SaveUserResponseDto = {
-    id: string;
-};
 
 export class SaveUserRoute implements Route {
     private constructor(
@@ -28,14 +26,14 @@ export class SaveUserRoute implements Route {
         return async (request: Request, response: Response) => {
             const { id, name, email,age } = request.body;
 
-            const input: SaveUserInputDto = {
+            const input: SaveUserDto = {
                 id,
                 name,
                 email,
                 age
             };
 
-            const output: SaveUserResponseDto =
+            const output: SaveUserDto =
                 await this.SaveUserService.execute(input);
 
             const responseBody = this.present(output);
@@ -52,8 +50,12 @@ export class SaveUserRoute implements Route {
         return this.method;
     }
 
-    private present(input: SaveUserResponseDto): SaveUserResponseDto {
-        const response = { id: input.id };
+    private present(input: SaveUserDto): ResponseDto {
+        const response = {
+            success: ["Usuário salvo com sucesso"],
+            result : input
+
+        };
         return response;
     }
 }

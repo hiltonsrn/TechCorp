@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import {
-    ListUserOutputDto,
     ListUserUsecase,
 } from "../../../../../usecases/user/list-user";
 import { HttpMethod, Route } from "../route";
+import { ResultUserDto } from "../../../dto/resultuserdto";
+import { ResponseDto } from "../../../dto/responsedto";
+import { info } from "console";
 
 export type ListUserResponseDto = {
     Users: {
@@ -47,16 +49,13 @@ export class ListUserRoute implements Route {
         return this.method;
     }
 
-    private present(input: ListUserOutputDto): ListUserResponseDto {
-        const response: ListUserResponseDto = {
-            Users: input.Users.map((User) => ({
-                id: User.id,
-                name: User.name,
-                email: User.email,
-                age: User.age
-            })),
+    private present(input: ResultUserDto[]): ResponseDto {
+        let qtd = input.length;
+        let msg = qtd + ( qtd > 1 ? " Usuários encontrados" : " Usuário encontrado");
+        const response = {
+            info: [msg],
+            result : input
         };
-
         return response;
     }
 }

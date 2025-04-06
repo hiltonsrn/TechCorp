@@ -1,20 +1,11 @@
 import { User } from "../../domain/user/entity/user";
 import { UserGateway } from "../../domain/user/gateway/usergateway";
-import { Usecase } from "../usecase";
+import { ResultUserDto } from "../../infra/api/dto/resultuserdto";
+import { ListUsecase } from "../usecase";
 
-export type ListUserInputDto = void;
-
-export type ListUserOutputDto = {
-    Users: {
-        id: string;
-        name: string;
-        email: string;
-        age: number;
-    }[];
-};
 
 export class ListUserUsecase
-    implements Usecase<ListUserInputDto, ListUserOutputDto>
+    implements ListUsecase<ResultUserDto>
 {
     private constructor(private readonly UserGateway: UserGateway) {}
 
@@ -22,7 +13,7 @@ export class ListUserUsecase
         return new ListUserUsecase(UserGateway);
     }
 
-    public async execute(): Promise<ListUserOutputDto> {
+    public async execute(): Promise<ResultUserDto[]> {
         const aUsers = await this.UserGateway.list();
 
         const output = this.presentOutput(aUsers);
@@ -30,16 +21,14 @@ export class ListUserUsecase
         return output;
     }
 
-    private presentOutput(Users: User[]): ListUserOutputDto {
-        return {
-            Users: Users.map((p) => {
+    private presentOutput(Users: User[]): ResultUserDto[] {
+        return  Users.map((p) => {
                 return {
                     id: p.id,
                     name: p.name,
                     email: p.email,
                     age: p.age,
                 };
-            }),
-        };
+            });
     }
 }

@@ -9,7 +9,7 @@ export class User {
     
     private constructor(private props: UserProps) {}
 
-    public static create(name: string, email: string, age:number) {
+    public static create(id: string,name: string, email: string, age:number) {
         const emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
         const ageAllow = parseInt( process.env.AGE_ALLOW);
         if(!emailRegex.test(email))
@@ -17,10 +17,10 @@ export class User {
         if(age < ageAllow)
             throw new Error("Idade mínima para cadastro é " + ageAllow);
         return new User({
-            id: crypto.randomUUID().toString(),
+            id: id ?? crypto.randomUUID().toString(),
             name,
             email,
-            age: 0,
+            age,
         });
     }
 

@@ -1,20 +1,11 @@
 import { User } from "../../domain/user/entity/user";
 import { UserGateway } from "../../domain/user/gateway/usergateway";
-import { Usecase } from "../usecase";
+import { SaveUserDto } from "../../infra/api/dto/saveuserdto";
+import { SaveUsecase } from "../usecase";
 
-export type SaveUserInputDto = {
-    id: string;
-    name: string;
-    email: string;
-    age: number
-};
-
-export type SaveUserOutputDto = {
-    id: string;
-};
 
 export class SaveUserUsecase
-    implements Usecase<SaveUserInputDto, SaveUserOutputDto>
+    implements SaveUsecase<SaveUserDto>
 {
     private constructor(private readonly UserGateway: UserGateway) {}
 
@@ -27,12 +18,16 @@ export class SaveUserUsecase
         name,
         email,
         age,
-    }: SaveUserInputDto): Promise<SaveUserOutputDto> {
-        const aUser = User.create(name, email,age);
-        const existUser = await this.UserGateway.getByEmail(email);
-        if(existUser && existUser.id != id){
-            throw new Error("E-mail já cadastrado");
-            await this.UserGateway.update(aUser);            
+    }: SaveUserDto): Promise<SaveUserDto> {
+        const aUser = User.create(id,name, email,age);
+        if(id != null){        
+            const existEmailUser = await this.UserGateway.getByEmail(email);
+            if(existEmailUser){
+                if(existEmailUser.id != id){
+                    throw new Error("E-mail já cadastrado");                       
+                }                
+            }
+            await this.UserGateway.update(aUser); 
         }
         else{        
             await this.UserGateway.create(aUser);            
@@ -41,9 +36,12 @@ export class SaveUserUsecase
         return output;
     }
 
-    private presentOutput(User: User): SaveUserOutputDto {
-        const output: SaveUserOutputDto = {
-            id: User.id
+    private presentOutput(User: User): SaveUserDto {
+        const output: SaveUserDto = {
+            id: User.id,
+            name:User.name,
+            email:User.email,
+            age:User.age
         }
 
         return output;
