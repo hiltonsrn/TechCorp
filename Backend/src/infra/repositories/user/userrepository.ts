@@ -17,23 +17,23 @@ export class UserRepositoryPrisma implements UserGateway {
             age: User.age,
         };
 
-        await this.prismaClient.User.create({
+        await this.prismaClient.user.create({
             data,
         });
     }
 
     public async list(): Promise<User[]> {
-        const Users = await this.prismaClient.User.findMany();
+        const Users = await this.prismaClient.user.findMany();
 
-        const UserList = Users.map((p) => {
-            const User = User.with({
+        const UserList = Users.map((p: any) => {
+            const u = User.with({
                 id: p.id,
                 name: p.name,
                 email: p.email,
                 age: p.age,
             });
 
-            return User;
+            return u;
         });
 
         return UserList;
