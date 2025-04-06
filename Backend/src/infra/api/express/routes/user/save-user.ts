@@ -1,41 +1,42 @@
 import { Request, Response } from "express";
 import {
-    CreateUserInputDto,
-    CreateUserUsecase,
-} from "../../../../../usecases/user/create-user";
+    SaveUserInputDto,
+    SaveUserUsecase,
+} from "../../../../../usecases/user/save-user";
 import { HttpMethod, Route } from "../route";
 
-export type CreateUserResponseDto = {
+export type SaveUserResponseDto = {
     id: string;
 };
 
-export class CreateUserRoute implements Route {
+export class SaveUserRoute implements Route {
     private constructor(
         private readonly path: string,
         private readonly method: HttpMethod,
-        private readonly createUserService: CreateUserUsecase
+        private readonly SaveUserService: SaveUserUsecase
     ) {}
 
-    public static create(createUserService: CreateUserUsecase) {
-        return new CreateUserRoute(
+    public static create(SaveUserService: SaveUserUsecase) {
+        return new SaveUserRoute(
             "/Users",
             HttpMethod.POST,
-            createUserService
+            SaveUserService
         );
     }
 
     public getHandler() {
         return async (request: Request, response: Response) => {
-            const { name, email,age } = request.body;
+            const { id, name, email,age } = request.body;
 
-            const input: CreateUserInputDto = {
+            const input: SaveUserInputDto = {
+                id,
                 name,
                 email,
                 age
             };
 
-            const output: CreateUserResponseDto =
-                await this.createUserService.execute(input);
+            const output: SaveUserResponseDto =
+                await this.SaveUserService.execute(input);
 
             const responseBody = this.present(output);
 
@@ -51,7 +52,7 @@ export class CreateUserRoute implements Route {
         return this.method;
     }
 
-    private present(input: CreateUserResponseDto): CreateUserResponseDto {
+    private present(input: SaveUserResponseDto): SaveUserResponseDto {
         const response = { id: input.id };
         return response;
     }

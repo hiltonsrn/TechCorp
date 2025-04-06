@@ -9,7 +9,7 @@ export class UserRepositoryPrisma implements UserGateway {
         return new UserRepositoryPrisma(prismaClient);
     }
 
-    public async save(User: User): Promise<void> {
+    public async create(User: User): Promise<void> {
         const data = {
             id: User.id,
             name: User.name,
@@ -20,6 +20,21 @@ export class UserRepositoryPrisma implements UserGateway {
         await this.prismaClient.user.create({
             data,
         });
+    }
+    public async update(User: User): Promise<void> {
+        const data = {
+            id: User.id,
+            name: User.name,
+            email: User.email,
+            age: User.age,
+        };
+
+        await this.prismaClient.user.update({
+            where: {
+              id:  data.id
+            },
+            data: data,
+          })
     }
 
     public async list(): Promise<User[]> {
@@ -37,5 +52,22 @@ export class UserRepositoryPrisma implements UserGateway {
         });
 
         return UserList;
+    }
+    public async getByEmail(email: string): Promise<User> {
+        const p = await this.prismaClient.user.findFirst({
+            where: {
+              email: email,
+            },
+          });
+        let u = null;
+        if(p != null){
+            u = User.with({
+                id: p.id,
+                name: p.name,
+                email: p.email,
+                age: p.age,
+            });
+        }
+        return u;
     }
 }
