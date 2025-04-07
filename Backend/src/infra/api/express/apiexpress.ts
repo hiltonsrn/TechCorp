@@ -7,6 +7,8 @@ export class ApiExpress implements Api {
 
     private constructor(routes: Route[]) {
         this.app = express();
+        var cors = require("cors");
+        this.app.use(cors());
         this.app.use(express.json());
         this.addRoutes(routes);
     }
