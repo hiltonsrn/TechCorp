@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import { toast } from "react-toastify";
+import { toast,ToastContainer } from "react-toastify";
 
 const Table = styled.table`
   width: 100%;
@@ -53,7 +53,16 @@ const Grid = ({ users, setUsers, setOnEdit }) => {
         const newArray = users.filter((user) => user.id !== id);
 
         setUsers(newArray);
-        toast.success(data);
+        if(data.success){
+            data.success.map((e)=>{
+                toast.success(e);
+            });
+        }
+        if(data.erro){
+            data.erro.map((e)=>{
+              toast.error(e);
+            });
+        }
       })
       .catch(({ data }) => toast.error(data));
     setOnEdit(null);
