@@ -32,12 +32,14 @@ export class SaveUserRoute implements Route {
                 email,
                 age
             };
-
+            let responseBody:any;
+            try{
             const output: SaveUserDto =
                 await this.SaveUserService.execute(input);
-
-            const responseBody = this.present(output);
-
+                responseBody = this.present(output);
+            }catch(e){
+                responseBody = this.presentErro(e);
+            }
             response.status(201).json(responseBody).send();
         };
     }
@@ -54,6 +56,13 @@ export class SaveUserRoute implements Route {
         const response = {
             success: ["Usuário salvo com sucesso"],
             result : input
+
+        };
+        return response;
+    }
+    private presentErro(e:any): ResponseDto {
+        const response = {
+            erro: [e.toString()]
 
         };
         return response;

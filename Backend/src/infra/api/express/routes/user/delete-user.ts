@@ -17,7 +17,7 @@ export class DeleteUserRoute implements Route {
     public static create(DeleteUserService: DeleteUserUsecase) {
         return new DeleteUserRoute(
             "/Delete",
-            HttpMethod.GET,
+            HttpMethod.DELETE,
             DeleteUserService
         );
     }
