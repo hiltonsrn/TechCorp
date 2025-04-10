@@ -25,7 +25,6 @@ export class ImportUserRoute implements Route {
     public getHandler() {
         return async (request: Request, response: Response) => {
             const data = request.body;
-            console.log("Arquivo",data);
             let users: SaveUserDto[] = [];
             data.map((u:any) =>{
                 users.push({
@@ -37,7 +36,6 @@ export class ImportUserRoute implements Route {
             });
             const output: ResponseDto =
                 await this.ImportUserService.execute(users);
-            console.log("Retorno",output);
             response.status(201).json(output).send();
         };
     }
