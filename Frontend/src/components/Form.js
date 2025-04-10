@@ -39,22 +39,19 @@ const Form = ({ getUsers, onEdit, setOnEdit,setTipoCadastro }) => {
     let u = {};
     if (onEdit) {
       u = {
-            id:  onEdit.id,
-            name: user.name.value,
-            email: user.email.value,
-            age: parseInt(user.age.value)
+        id:  onEdit.id,
+        name: user.name.value,
+        email: user.email.value,
+        age: parseInt(user.age.value)
       };
-      await axios
-        .post(url, u)
-        .then(({ data }) => toast.success(data))
-        .catch(({ data }) => toast.error(data));
     } else {
       u =  {
         name: user.name.value,
         email: user.email.value,
         age: parseInt(user.age.value),
-      };
-      await axios
+      };      
+    }
+    await axios
         .post(url,u)
         .then(({ data }) => {
           if(data.success){
@@ -70,12 +67,11 @@ const Form = ({ getUsers, onEdit, setOnEdit,setTipoCadastro }) => {
           else{
             user.name.value = "";
             user.email.value = "";
-            user.age.value = "";
-            setOnEdit(null);
+            user.age.value = "";            
             getUsers();
           }
         });
-    }
+    setOnEdit(null);
     setIsLoading(false);
   };
   
