@@ -25,7 +25,7 @@ function main() {
     const importRoute = ImportUserRoute.create(importUserUsecase);
 
     const api = ApiExpress.create([saveRoute, listRoute,deleteRoute,importRoute]);
-    const port = 8000;
+    const port = 5002;
     api.start(port);
 }
 

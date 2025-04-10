@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/main.ts"
+    "start": "yarn db:deploy && ts-node src/main.ts",
+    "db:deploy": "npx prisma generate && npx prisma db push"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "yarn": "^1.22.22"
   }
 }
