@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { toast,ToastContainer } from "react-toastify";
 import FormContainer from "../styles/formContainer";
@@ -8,10 +8,11 @@ import ButtonArea from "../styles/buttonArea";
 import Input from "../styles/input";
 import Label from "../styles/label";
 import Button from "../styles/button";
+import Loading from "./Loading";
 
 const Form = ({ getUsers, onEdit, setOnEdit,setTipoCadastro }) => {
   const ref = useRef();
-
+  const [isLoading,setIsLoading] = useState(false);
   useEffect(() => {
     if (onEdit) {
       const user = ref.current;
@@ -24,6 +25,7 @@ const Form = ({ getUsers, onEdit, setOnEdit,setTipoCadastro }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const url = process.env.REACT_APP_API + "Save";
     const user = ref.current;
 
@@ -73,11 +75,13 @@ const Form = ({ getUsers, onEdit, setOnEdit,setTipoCadastro }) => {
             getUsers();
           }
         });
-    }    
+    }
+    setIsLoading(false);
   };
   
-  return (
+  return (    
     <FormContainer ref={ref} onSubmit={handleSubmit}>
+      {isLoading && <Loading/>}
       <InputArea>
         <Label>Nome</Label>
         <Input name="name" style={{width:"300px"}} />

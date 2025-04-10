@@ -10,12 +10,15 @@ import Input from "../styles/input";
 import Label from "../styles/label";
 import Button from "../styles/button";
 import InfoArea from "../styles/infoArea";
+import Loading from "./Loading";
 
 const Import = ({getUsers,setTipoCadastro}) => {  
   const ref = useRef();
+  const [isLoading,setIsLoading] = useState(false);
   const [users,setUsers] = useState([]);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const arq = ref.current;
     if (
           !arq.file.value
@@ -45,9 +48,11 @@ const Import = ({getUsers,setTipoCadastro}) => {
         setUsers(results.data)
       },
     });
+    setIsLoading(false);
   };
   return (
     <FormContainer ref={ref} onSubmit={handleSubmit}>
+      {isLoading && <Loading/>}
       <InputArea>
         <Label>Arquivo</Label>
         <Input type="file" name="file" onChange={changeHandler}/>
